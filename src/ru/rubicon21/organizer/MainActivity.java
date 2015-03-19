@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.names, android.R.layout.simple_list_item_1);
         lvMain.setAdapter(adapter);
-        
+
 
         //обработка нажатия на элемент списка
         lvMain.setOnItemClickListener(new OnItemClickListener() {

@@ -10,12 +10,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import ru.rubicon21.organizer.adapter.MainWindowAdapter;
+import ru.rubicon21.organizer.entity.Task;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
     final String LOG_TAG = "myLogs";
-
     ListView lvMain;
+
+    MainWindowAdapter mainWindowAdapter;
+    ArrayList<Task> tasks;
 
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
@@ -23,10 +29,18 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 
         lvMain = (ListView) findViewById(R.id.lvMain);
+        tasks = new ArrayList<Task>();
+        tasks.add(new Task("Тест","Пробная запись"));
+        mainWindowAdapter = new MainWindowAdapter(this,tasks);
+       // tasks.add(new Task("1","2"));
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.names, android.R.layout.simple_list_item_1);
-        lvMain.setAdapter(adapter);
+        lvMain.setAdapter(adapter);*/
+
+        lvMain.setAdapter(mainWindowAdapter);
+
+
 
 
         //обработка нажатия на элемент списка

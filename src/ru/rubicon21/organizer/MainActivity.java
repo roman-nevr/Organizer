@@ -1,6 +1,8 @@
 package ru.rubicon21.organizer;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +35,6 @@ public class MainActivity extends Activity {
         tasks = new ArrayList<Task>();
         tasks = (new GetData()).getTasks();
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
-       // tasks.add(new Task("1","2"));
 
         lvMain.setAdapter(mainWindowAdapter);
 
@@ -41,11 +42,17 @@ public class MainActivity extends Activity {
         lvMain.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Log.d(LOG_TAG, "itemClick: position = " + position + ", id = "
-                        + id);
+                Log.d(LOG_TAG, "itemClick: position = " + position + ", id = " + id);
+
+                try {
+                    Intent intent = new Intent(MainActivity.this, TaskDetails.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("NPE");
+                }
             }
         });
-
-
     }
+
 }

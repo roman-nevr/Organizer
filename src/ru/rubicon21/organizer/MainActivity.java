@@ -26,22 +26,10 @@ public class MainActivity extends Activity {
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-
-        lvMain = (ListView) findViewById(R.id.lvMain);
         tasks = new ArrayList<Task>();
         tasks.add(new Task("Тест","Пробная запись"));
-        mainWindowAdapter = new MainWindowAdapter(this,tasks);
-       // tasks.add(new Task("1","2"));
 
-        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.names, android.R.layout.simple_list_item_1);
-        lvMain.setAdapter(adapter);*/
-
-        lvMain.setAdapter(mainWindowAdapter);
-
-
-
+        onView();
 
         //обработка нажатия на элемент списка
         lvMain.setOnItemClickListener(new OnItemClickListener() {
@@ -51,38 +39,13 @@ public class MainActivity extends Activity {
                         + id);
             }
         });
-        //обработка выделения (хз как использовать, но есть такая)
-        lvMain.setOnItemSelectedListener(new OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                Log.d(LOG_TAG, "itemSelect: position = " + position + ", id = "
-                        + id);
-            }
 
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.d(LOG_TAG, "itemSelect: nothing");
-            }
-        });
+    }
 
-        //обработка прокрутки списка
-        lvMain.setOnScrollListener(new AbsListView.OnScrollListener() {
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                //обработка состояния прокрутки
-                //0 - стоит
-                //1 - его тащат
-                //2 - он листается сам
-                //еще немного
-                Log.d(LOG_TAG, "scrollState = " + scrollState);
-            }
-
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-                //обработка положения листа
-                /*Log.d(LOG_TAG, "scroll: firstVisibleItem = " + firstVisibleItem
-                        + ", visibleItemCount" + visibleItemCount
-                        + ", totalItemCount" + totalItemCount);*/
-            }
-        });
-
+    public void onView(){
+        setContentView(R.layout.main);
+        lvMain = (ListView) findViewById(R.id.lvMain);
+        mainWindowAdapter = new MainWindowAdapter(this,tasks);
+        lvMain.setAdapter(mainWindowAdapter);
     }
 }

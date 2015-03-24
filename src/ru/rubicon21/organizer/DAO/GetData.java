@@ -1,11 +1,14 @@
 package ru.rubicon21.organizer.DAO;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import ru.rubicon21.organizer.entity.Task;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -28,16 +31,59 @@ public class GetData {
 
     public ArrayList<Task> getTasks(){
         tasks = new ArrayList<Task>();
-        tasks.add(new Task("Тест","Пробная запись"));
-        tasks.add(new Task("Тест 2","Вторая Пробная запись"));
+        tasks.add(new Task(1, "Тест", "Пробная запись"));
+        tasks.add(new Task(2, "Тест 2", "Вторая Пробная запись"));
         return tasks;
     }
 
-    /*
-     PK
-    |id|parent_id|name|description|has_children|
+    public ArrayList<Task> getTasks(Context context, int _parent_id){
+        tasks = new ArrayList<Task>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(DB_TABLE_NAME, null, null, null, null, null, null);
+        if (cursor.moveToFirst()){
+            int idColumnIndex = cursor.getColumnIndex(DB_ID);
+            int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
+            int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
+            do{
+                tasks.add(new Task(cursor.getInt(idColumnIndex),
+                        cursor.getString(nameColumnIndex),
+                        cursor.getString(descriptionColumnIndex)));
+            }while (cursor.moveToNext());
+        }else {
+            //сделать оповещение о пустой базе
+            }
+        cursor.close();
 
-    */
+        return  tasks;
+    }
+
+    public void saveTask(Context context, Task task) throws SQLException{
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DB_TASK_NAME, task.getTaskName());
+        contentValues.put(DB_TASK_DESCRIPTION, task.getTaskDescription());
+        long id = db.insert(DB_TABLE_NAME, null, contentValues);
+        if (id == -1){
+            throw new SQLException("write fail");
+        }
+    }
+
+    public int deleteTask(Task task){
+        //написать удаление строк
+        /* http://developer.android.com/training/basics/data-storage/databases.html
+        // Define 'where' part of query.
+        String selection = FeedEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(rowId) };
+        // Issue SQL statement.
+        db.delete(table_name, selection, selectionArgs);
+        */
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String selection = DB_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(task.getId())};
+        int num = db.delete(DB_TABLE_NAME,selection,selectionArgs);
+        return num;
+    }
     /*
     * switch (v.getId()) {
             case R.id.btnAdd:
@@ -103,10 +149,11 @@ public class GetData {
         public void onCreate(SQLiteDatabase db) {
             Log.d(LOG_TAG, "--- onCreate database ---");
             // создаем таблицу с полями
+            //|id|parent_id|name|description|has_children|
             db.execSQL("create table "+DB_TABLE_NAME+" ("
                     + DB_ID+" integer primary key autoincrement,"
                     + DB_PARENT_ID+" integer,"
-                    + DB_TABLE_NAME+" text,"
+                    + DB_TASK_NAME+" text,"
                     + DB_TASK_DESCRIPTION+" text,"
                     + DB_HAS_CHILDREN+" integer"
                     + ");");

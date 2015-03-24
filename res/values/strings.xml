@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">organizer</string>
+    <string name="task_name">Задачи</string>
     <string name="box">Корзина</string>
     <string-array name="names">
         <item>Иван</item>

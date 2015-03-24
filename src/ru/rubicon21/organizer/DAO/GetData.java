@@ -1,5 +1,9 @@
 package ru.rubicon21.organizer.DAO;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import ru.rubicon21.organizer.entity.Task;
 
 import java.util.ArrayList;
@@ -8,7 +12,20 @@ import java.util.ArrayList;
  * Created by roma on 22.03.2015.
  */
 public class GetData {
+
     ArrayList<Task> tasks;
+
+    DBHelper dbHelper;
+    final String DB_NAME = "taskDB";
+    final String DB_TABLE_NAME = "tasks";
+    final String DB_ID = "id";
+    final String DB_PARENT_ID = "parent_id";
+    final String DB_TASK_NAME = "name";
+    final String DB_TASK_DESCRIPTION = "description";
+    final String DB_HAS_CHILDREN = "has_children";
+    final String LOG_TAG = "myLogs";
+
+
     public ArrayList<Task> getTasks(){
         tasks = new ArrayList<Task>();
         tasks.add(new Task("Тест","Пробная запись"));
@@ -69,25 +86,30 @@ public class GetData {
         }
         // закрываем подключение к БД
         dbHelper.close();
-    }
-
-
+    }*/
+    /*
+    PK
+    |id|parent_id|name|description|has_children|
+    */
 
     class DBHelper extends SQLiteOpenHelper {
 
         public DBHelper(Context context) {
             // конструктор суперкласса
-            super(context, "myDB", null, 1);
+            super(context, DB_NAME, null, 1);
         }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
             Log.d(LOG_TAG, "--- onCreate database ---");
             // создаем таблицу с полями
-            db.execSQL("create table mytable ("
-                    + "id integer primary key autoincrement,"
-                    + "name text,"
-                    + "email text" + ");");
+            db.execSQL("create table "+DB_TABLE_NAME+" ("
+                    + DB_ID+" integer primary key autoincrement,"
+                    + DB_PARENT_ID+" integer,"
+                    + DB_TABLE_NAME+" text,"
+                    + DB_TASK_DESCRIPTION+" text,"
+                    + DB_HAS_CHILDREN+" integer"
+                    + ");");
         }
 
         @Override
@@ -95,5 +117,5 @@ public class GetData {
 
         }
     }
-    * */
+
 }

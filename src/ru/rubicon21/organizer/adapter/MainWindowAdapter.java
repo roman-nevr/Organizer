@@ -51,8 +51,8 @@ public class MainWindowAdapter extends BaseAdapter {
 
         Task task = (Task) getItem(position);
 
-        ((TextView) view.findViewById(R.id.tvTaskName)).setText(task.taskName);
-        ((TextView) view.findViewById(R.id.tvTaskDescription)).setText(task.taskDescription);
+        ((TextView) view.findViewById(R.id.tvTaskName)).setText(task.getTaskName());
+        ((TextView) view.findViewById(R.id.tvTaskDescription)).setText(task.getTaskDescription());
         return view;
 
     }

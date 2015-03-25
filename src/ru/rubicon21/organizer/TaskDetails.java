@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import ru.rubicon21.organizer.DAO.GetData;
 import ru.rubicon21.organizer.adapter.MainWindowAdapter;
@@ -43,6 +44,18 @@ public class TaskDetails extends Activity {
         tasks = (new GetData()).getTasks();
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
 
+        Button buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
+        View.OnClickListener onClickListenerButtonAddTask = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TaskDetails.this, AddTask.class);
+                intent.putExtra("parent_id",tasks.get(0).getParentId());
+                Log.d(LOG_TAG, "parent_id : " + tasks.get(0).getParentId() + " ");
+                startActivity(intent);
+            }
+        };
+        buttonAddTask.setOnClickListener(onClickListenerButtonAddTask);
+
         lvMain.setAdapter(mainWindowAdapter);
 
         //обработка нажатия на элемент списка
@@ -53,6 +66,7 @@ public class TaskDetails extends Activity {
 
                 try {
                     Intent intent = new Intent(TaskDetails.this, TaskDetails.class);
+                    intent.putExtra("parent_id",position);
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

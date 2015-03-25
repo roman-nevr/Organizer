@@ -14,6 +14,7 @@
         </activity>
         <activity android:name=".TaskDetails"
                   android:label="@string/task_name"/>
+        <activity android:name=".AddTask" android:label="Добавить задачу"/>
 
     </application>
 </manifest> 

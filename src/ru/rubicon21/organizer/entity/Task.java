@@ -5,16 +5,23 @@ package ru.rubicon21.organizer.entity;
  */
 public class Task {
 
-    int id;
+    /*
+    PK
+    |taskId|parent_id|name|description|has_children|
+    */
+
+    int taskId;
+    int parentId;
     String taskName;
     String taskDescription;
+    int hasChildren;
 
-    public int getId() {
-        return id;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     public String getTaskName() {
@@ -33,8 +40,36 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
-    public Task(int _id, String _name, String _description) {
-        id = _id;
+    public int getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    public int getHasChildren() {
+        return hasChildren;
+    }
+
+    public void setHasChildren(int hasChildren) {
+        this.hasChildren = hasChildren;
+    }
+
+    public Task (String _name, String _description){
+        taskName = _name;
+        taskDescription = _description;
+    }
+
+    public Task (int _id, String _name, String _description) {
+        taskId = _id;
+        taskName = _name;
+        taskDescription = _description;
+    }
+
+    public Task (int _id, int _parentID, String _name, String _description){
+        taskId = _id;
+        parentId = _parentID;
         taskName = _name;
         taskDescription = _description;
     }

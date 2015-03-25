@@ -33,8 +33,16 @@ public class GetData {
 
     public ArrayList<Task> getTasks(){
         tasks = new ArrayList<Task>();
-        tasks.add(new Task(1, "Тест", "Пробная запись"));
-        tasks.add(new Task(2, "Тест 2", "Вторая Пробная запись"));
+        tasks.add(new Task(1, 0, "Тест", "Пробная запись"));
+        tasks.add(new Task(2, 0, "Тест 2", "Вторая Пробная запись"));
+        tasks.add(new Task(3, 0, "Тест", "Пробная запись"));
+        tasks.add(new Task(4, 1, "Тест", "Пробная запись"));
+        tasks.add(new Task(5, 1, "Тест", "Пробная запись"));
+        tasks.add(new Task(6, 2, "Тест", "Пробная запись"));
+        tasks.add(new Task(7, 2, "Тест", "Пробная запись"));
+        tasks.add(new Task(8, 3, "Тест", "Пробная запись"));
+        tasks.add(new Task(9, 4, "Тест", "Пробная запись"));
+        tasks.add(new Task(10, 5, "Тест", "Пробная запись"));
         return tasks;
     }
 
@@ -57,22 +65,26 @@ public class GetData {
             //сделать оповещение о пустой базе
             }
         cursor.close();
+        db.close();
 
         return  tasks;
     }
 
     public void saveTask(Context context, Task task) throws SQLException{
+        dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(DB_PARENT_ID, task.getParentId());
         contentValues.put(DB_TASK_NAME, task.getTaskName());
         contentValues.put(DB_TASK_DESCRIPTION, task.getTaskDescription());
         long id = db.insert(DB_TABLE_NAME, null, contentValues);
+        db.close();
         if (id == -1){
             throw new SQLException("write fail");
         }
     }
 
-    public int deleteTask(Task task){
+    public int deleteTask(Context context, Task task){
         //написать удаление строк
         /* http://developer.android.com/training/basics/data-storage/databases.html
         // Define 'where' part of query.
@@ -82,61 +94,15 @@ public class GetData {
         // Issue SQL statement.
         db.delete(table_name, selection, selectionArgs);
         */
+        dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String selection = DB_ID + " LIKE ?";
-        String[] selectionArgs = {String.valueOf(task.getId())};
+        String[] selectionArgs = {String.valueOf(task.getTaskId())};
         int num = db.delete(DB_TABLE_NAME,selection,selectionArgs);
+        db.close();
         return num;
     }
-    /*
-    * switch (v.getId()) {
-            case R.id.btnAdd:
-                Log.d(LOG_TAG, "--- Insert in mytable: ---");
-                // подготовим данные для вставки в виде пар: наименование столбца - значение
 
-                cv.put("name", name);
-                cv.put("email", email);
-                // вставляем запись и получаем ее ID
-                long rowID = db.insert("mytable", null, cv);
-                Log.d(LOG_TAG, "row inserted, ID = " + rowID);
-                break;
-            case R.id.btnRead:
-                Log.d(LOG_TAG, "--- Rows in mytable: ---");
-                // делаем запрос всех данных из таблицы mytable, получаем Cursor
-                Cursor c = db.query("mytable", null, null, null, null, null, null);
-
-                // ставим позицию курсора на первую строку выборки
-                // если в выборке нет строк, вернется false
-                if (c.moveToFirst()) {
-
-                    // определяем номера столбцов по имени в выборке
-                    int idColIndex = c.getColumnIndex("id");
-                    int nameColIndex = c.getColumnIndex("name");
-                    int emailColIndex = c.getColumnIndex("email");
-
-                    do {
-                        // получаем значения по номерам столбцов и пишем все в лог
-                        Log.d(LOG_TAG,
-                                "ID = " + c.getInt(idColIndex) +
-                                        ", name = " + c.getString(nameColIndex) +
-                                        ", email = " + c.getString(emailColIndex));
-                        // переход на следующую строку
-                        // а если следующей нет (текущая - последняя), то false - выходим из цикла
-                    } while (c.moveToNext());
-                } else
-                    Log.d(LOG_TAG, "0 rows");
-                c.close();
-                break;
-            case R.id.btnClear:
-                Log.d(LOG_TAG, "--- Clear mytable: ---");
-                // удаляем все записи
-                int clearCount = db.delete("mytable", null, null);
-                Log.d(LOG_TAG, "deleted rows count = " + clearCount);
-                break;
-        }
-        // закрываем подключение к БД
-        dbHelper.close();
-    }*/
     /*
     PK
     |id|parent_id|name|description|has_children|

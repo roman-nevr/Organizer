@@ -19,6 +19,7 @@ public class GetData {
     ArrayList<Task> tasks;
 
     DBHelper dbHelper;
+
     final String DB_NAME = "taskDB";
     final String DB_TABLE_NAME = "tasks";
     final String DB_ID = "id";
@@ -26,6 +27,7 @@ public class GetData {
     final String DB_TASK_NAME = "name";
     final String DB_TASK_DESCRIPTION = "description";
     final String DB_HAS_CHILDREN = "has_children";
+
     final String LOG_TAG = "myLogs";
 
 
@@ -38,6 +40,8 @@ public class GetData {
 
     public ArrayList<Task> getTasks(Context context, int _parent_id){
         tasks = new ArrayList<Task>();
+
+        dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(DB_TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToFirst()){

@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
     ArrayList<Task> tasks;
 
     /** Called when the activity is first created. */
-    public void onCreate(Bundle savedInstanceState) {
+    /*public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -53,6 +53,11 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }*/
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Intent intent = new Intent(this, TaskDetails.class);
+        startActivity(intent);
     }
 
 }

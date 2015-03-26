@@ -55,12 +55,14 @@ public class GetData {
         Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, null);
         if (cursor.moveToFirst()){
             int idColumnIndex = cursor.getColumnIndex(DB_ID);
+            int parentIdColumnIndex = cursor.getColumnIndex(DB_PARENT_ID);
             int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
             int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
             do{
                 tasks.add(new Task(cursor.getInt(idColumnIndex),
                         cursor.getString(nameColumnIndex),
                         cursor.getString(descriptionColumnIndex)));
+
             }while (cursor.moveToNext());
         }else {
             //сделать оповещение о пустой базе

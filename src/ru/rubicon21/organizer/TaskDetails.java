@@ -48,14 +48,15 @@ public class TaskDetails extends Activity {
 
         Intent incomeIntent = getIntent();
         parentID = incomeIntent.getIntExtra("parent_id",0);
+        Log.d(LOG_TAG,"income parentID : "+parentID+" ");
 
         Button buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
         View.OnClickListener onClickListenerButtonAddTask = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TaskDetails.this, AddTask.class);
-                intent.putExtra("parent_id",tasks.get(0).getParentId());
-                Log.d(LOG_TAG, "parent_id : " + tasks.get(0).getParentId() + " ");
+                intent.putExtra("parent_id",parentID);
+                Log.d(LOG_TAG, "out parent_id : " + parentID + " ");
                 startActivity(intent);
             }
         };
@@ -71,7 +72,7 @@ public class TaskDetails extends Activity {
 
                 try {
                     Intent intent = new Intent(TaskDetails.this, TaskDetails.class);
-                    intent.putExtra("parent_id",position);
+                    intent.putExtra("parent_id", position);
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

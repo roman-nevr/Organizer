@@ -73,4 +73,15 @@ public class Task {
         taskName = _name;
         taskDescription = _description;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", parentId=" + parentId +
+                ", taskName='" + taskName + '\'' +
+                ", taskDescription='" + taskDescription + '\'' +
+                ", hasChildren=" + hasChildren +
+                '}';
+    }
 }

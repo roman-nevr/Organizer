@@ -33,7 +33,7 @@ public class AddTask extends Activity {
         Button buttonCancelSaveTask = (Button) findViewById(R.id.buttonCancelSaveTask);
 
         Intent intent = getIntent();
-        int parentId = intent.getIntExtra("parent_id",0);
+        final int parentId = intent.getIntExtra("parent_id",0);
 
         OnClickListener onClickButtonSaveTask = new OnClickListener() {
             @Override
@@ -42,12 +42,14 @@ public class AddTask extends Activity {
                 Log.d(LOG_TAG, "et "+etTaskAddName.getText().toString());
                 if (!(TextUtils.isEmpty(etTaskAddName.getText().toString()))) {
                     Task task = new Task(etTaskAddName.getText().toString(), etTaskAddDescription.getText().toString());
+                    task.setParentId(parentId);
 
                     try {
                         (new GetData()).saveTask(AddTask.this, task);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     } finally {
+                        Log.d(LOG_TAG, task.toString());
                         AddTask.this.finish();
                     }
                 } else {

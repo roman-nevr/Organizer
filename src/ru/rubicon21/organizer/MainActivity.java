@@ -57,6 +57,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(this, TaskDetails.class);
+        intent.putExtra("parent_id",0);
         startActivity(intent);
     }
 

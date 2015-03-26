@@ -48,10 +48,11 @@ public class GetData {
 
     public ArrayList<Task> getTasks(Context context, int _parent_id){
         tasks = new ArrayList<Task>();
-
         dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(DB_TABLE_NAME, null, null, null, null, null, null);
+        String selection = DB_PARENT_ID+" LIKE ?";
+        String[] selectionArgs = {String.valueOf(_parent_id)};
+        Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, null);
         if (cursor.moveToFirst()){
             int idColumnIndex = cursor.getColumnIndex(DB_ID);
             int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
@@ -66,8 +67,32 @@ public class GetData {
             }
         cursor.close();
         db.close();
-
         return  tasks;
+    }
+
+    public Task getTask (Context context, int _id){
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selection = DB_ID+" LIKE ?";
+        String[] selectionArgs = {String.valueOf(_id)};
+        Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        Task task = new Task("","");
+        if (cursor.moveToFirst()){
+            int idColumnIndex = cursor.getColumnIndex(DB_ID);
+            int parentIdColumnIndex = cursor.getColumnIndex(DB_PARENT_ID);
+            int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
+            int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
+            task =  new Task(cursor.getInt(idColumnIndex),
+                    cursor.getString(nameColumnIndex),
+                    cursor.getString(descriptionColumnIndex));
+            task.setParentId(cursor.getInt(parentIdColumnIndex));
+
+        }else {
+            //сделать оповещение о пустой базе
+        }
+        cursor.close();
+        db.close();
+        return task;
     }
 
     public void saveTask(Context context, Task task) throws SQLException{
@@ -81,6 +106,9 @@ public class GetData {
         db.close();
         if (id == -1){
             throw new SQLException("write fail");
+        }else {
+            Log.d(LOG_TAG,"write successfully");
+            Log.d(LOG_TAG, getTask(context, (int)id).toString());
         }
     }
 

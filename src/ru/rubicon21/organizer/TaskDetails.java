@@ -34,6 +34,8 @@ public class TaskDetails extends Activity {
     MainWindowAdapter mainWindowAdapter;
     ArrayList<Task> tasks;
 
+    int parentID;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +45,9 @@ public class TaskDetails extends Activity {
         tasks = new ArrayList<Task>();
         tasks = (new GetData()).getTasks();
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
+
+        Intent incomeIntent = getIntent();
+        parentID = incomeIntent.getIntExtra("parent_id",0);
 
         Button buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
         View.OnClickListener onClickListenerButtonAddTask = new View.OnClickListener() {

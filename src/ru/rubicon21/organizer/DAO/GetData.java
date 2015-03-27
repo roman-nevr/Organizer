@@ -59,14 +59,16 @@ public class GetData {
             int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
             int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
             do{
-                tasks.add(new Task(cursor.getInt(idColumnIndex),
+                tasks.add(new Task(
+                        cursor.getInt(idColumnIndex),
+                        cursor.getInt(parentIdColumnIndex),
                         cursor.getString(nameColumnIndex),
                         cursor.getString(descriptionColumnIndex)));
 
             }while (cursor.moveToNext());
         }else {
             //сделать оповещение о пустой базе
-            }
+        }
         cursor.close();
         db.close();
         return  tasks;
@@ -84,10 +86,12 @@ public class GetData {
             int parentIdColumnIndex = cursor.getColumnIndex(DB_PARENT_ID);
             int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
             int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
-            task =  new Task(cursor.getInt(idColumnIndex),
+            task =  new Task(
+                    cursor.getInt(idColumnIndex),
+                    cursor.getInt(parentIdColumnIndex),
                     cursor.getString(nameColumnIndex),
                     cursor.getString(descriptionColumnIndex));
-            task.setParentId(cursor.getInt(parentIdColumnIndex));
+            //task.setParentId(cursor.getInt(parentIdColumnIndex));
 
         }else {
             //сделать оповещение о пустой базе

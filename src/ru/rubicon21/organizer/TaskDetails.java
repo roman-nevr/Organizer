@@ -40,14 +40,18 @@ public class TaskDetails extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        GetData dm = new GetData();
+
+        parentID = getIntent().getIntExtra("parent_id",0);
 
         lvMain = (ListView) findViewById(R.id.lvMain);
         tasks = new ArrayList<Task>();
-        tasks = (new GetData()).getTasks();
+        //tasks = (new GetData()).getTasks();
+        tasks = dm.getTasks(this, parentID);
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
 
-        Intent incomeIntent = getIntent();
-        parentID = incomeIntent.getIntExtra("parent_id",0);
+        /*Intent incomeIntent = getIntent();
+        parentID = incomeIntent.getIntExtra("parent_id",0);*/
         Log.d(LOG_TAG,"income parentID : "+parentID+" ");
 
         Button buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
@@ -80,5 +84,17 @@ public class TaskDetails extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GetData dm = new GetData();
+        parentID = getIntent().getIntExtra("parent_id",0);
+        tasks = dm.getTasks(TaskDetails.this, parentID);
+        lvMain = (ListView) findViewById(R.id.lvMain);
+        lvMain.invalidate();
+        Log.d(LOG_TAG,"onResume");
+        //mainWindowAdapter.notifyDataSetChanged();
     }
 }

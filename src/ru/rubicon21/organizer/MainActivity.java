@@ -61,4 +61,9 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.this.finish();
+    }
 }

@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-import ru.rubicon21.organizer.DAO.GetData;
+import ru.rubicon21.organizer.DAO.DataManager;
 import ru.rubicon21.organizer.entity.Task;
 
 import java.sql.SQLException;
@@ -45,7 +45,7 @@ public class AddTask extends Activity {
                     task.setParentId(parentId);
 
                     try {
-                        (new GetData()).saveTask(AddTask.this, task);
+                        (new DataManager()).saveTask(AddTask.this, task);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     } finally {

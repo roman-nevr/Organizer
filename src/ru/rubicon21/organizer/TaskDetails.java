@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import ru.rubicon21.organizer.DAO.GetData;
+import ru.rubicon21.organizer.DAO.DataManager;
 import ru.rubicon21.organizer.adapter.MainWindowAdapter;
 import ru.rubicon21.organizer.entity.Task;
 
@@ -40,18 +40,16 @@ public class TaskDetails extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        GetData dm = new GetData();
+        DataManager dm = new DataManager();
 
         parentID = getIntent().getIntExtra("parent_id",0);
 
         lvMain = (ListView) findViewById(R.id.lvMain);
         tasks = new ArrayList<Task>();
-        //tasks = (new GetData()).getTasks();
+
         tasks = dm.getTasks(this, parentID);
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
 
-        /*Intent incomeIntent = getIntent();
-        parentID = incomeIntent.getIntExtra("parent_id",0);*/
         Log.d(LOG_TAG,"income parentID : "+parentID+" ");
 
         Button buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
@@ -88,28 +86,10 @@ public class TaskDetails extends Activity {
 
     @Override
     protected void onResume() {
-        /*
-        * надо сделать активити форрезалт
-        * в резалте возвращать id таска
-        * и делать add для TaskDetails.this.tasks
-        * после этого TaskDetails.this.mainWindowAdapter.notifyDataSetChanged();
-        * так правильно!
-        * */
         super.onResume();
-        GetData dm = new GetData();
-        parentID = getIntent().getIntExtra("parent_id",0);
+        DataManager dm = new DataManager();
+        parentID = getIntent().getIntExtra("parent_id", 0);
         tasks = dm.getTasks(TaskDetails.this, parentID);
-        lvMain = (ListView) findViewById(R.id.lvMain);
-        lvMain.invalidate();
-        Log.d(LOG_TAG,"onResume");
-        lvMain.setAdapter(new MainWindowAdapter(TaskDetails.this, tasks));
-
-        //mainWindowAdapter.notifyDataSetChanged();
-        //TaskDetails.this.mainWindowAdapter. = tasks;
-        //TaskDetails.this.lvMain.invalidate();
-        //TaskDetails.this.mainWindowAdapter.
-        //TaskDetails.this.mainWindowAdapter.notifyDataSetInvalidated();
-        //TaskDetails.this.mainWindowAdapter.notifyDataSetChanged();
-
+        this.mainWindowAdapter.refreshDataSet(tasks);
     }
 }

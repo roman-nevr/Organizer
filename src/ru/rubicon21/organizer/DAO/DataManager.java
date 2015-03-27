@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by roma on 22.03.2015.
  */
-public class GetData {
+public class DataManager {
 
     ArrayList<Task> tasks;
 
@@ -31,7 +31,7 @@ public class GetData {
     final String LOG_TAG = "myLogs";
 
 
-    public ArrayList<Task> getTasks(){
+    public ArrayList<Task> getTestTasks(){
         tasks = new ArrayList<Task>();
         tasks.add(new Task(1, 0, "Тест", "Пробная запись"));
         tasks.add(new Task(2, 0, "Тест 2", "Вторая Пробная запись"));

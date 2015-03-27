@@ -56,4 +56,5 @@ public class MainWindowAdapter extends BaseAdapter {
         return view;
 
     }
+
 }

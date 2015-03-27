@@ -88,6 +88,13 @@ public class TaskDetails extends Activity {
 
     @Override
     protected void onResume() {
+        /*
+        * надо сделать активити форрезалт
+        * в резалте возвращать id таска
+        * и делать add для TaskDetails.this.tasks
+        * после этого TaskDetails.this.mainWindowAdapter.notifyDataSetChanged();
+        * так правильно!
+        * */
         super.onResume();
         GetData dm = new GetData();
         parentID = getIntent().getIntExtra("parent_id",0);
@@ -95,6 +102,14 @@ public class TaskDetails extends Activity {
         lvMain = (ListView) findViewById(R.id.lvMain);
         lvMain.invalidate();
         Log.d(LOG_TAG,"onResume");
+        lvMain.setAdapter(new MainWindowAdapter(TaskDetails.this, tasks));
+
         //mainWindowAdapter.notifyDataSetChanged();
+        //TaskDetails.this.mainWindowAdapter. = tasks;
+        //TaskDetails.this.lvMain.invalidate();
+        //TaskDetails.this.mainWindowAdapter.
+        //TaskDetails.this.mainWindowAdapter.notifyDataSetInvalidated();
+        //TaskDetails.this.mainWindowAdapter.notifyDataSetChanged();
+
     }
 }

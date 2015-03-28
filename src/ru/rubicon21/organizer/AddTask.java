@@ -20,6 +20,7 @@ import java.sql.SQLException;
  */
 public class AddTask extends Activity {
     final String LOG_TAG = "myLogs";
+    DataManager dm = new DataManager();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,14 +45,13 @@ public class AddTask extends Activity {
                     Task task = new Task(etTaskAddName.getText().toString(), etTaskAddDescription.getText().toString());
                     task.setParentId(parentId);
 
-                    try {
-                        (new DataManager()).saveTask(AddTask.this, task);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    } finally {
-                        Log.d(LOG_TAG, task.toString());
-                        AddTask.this.finish();
+                    long result = dm.saveTask(AddTask.this, task);
+                    if (result == -1){
+                        Toast.makeText(AddTask.this, "write fail", Toast.LENGTH_LONG).show();
                     }
+                    Log.d(LOG_TAG, task.toString());
+                    AddTask.this.finish();
+
                 } else {
                     Log.d(LOG_TAG, "toast");
                     Toast.makeText(AddTask.this,"Введите хотя бы имя", Toast.LENGTH_SHORT).show();
@@ -63,8 +63,6 @@ public class AddTask extends Activity {
             @Override
             public void onClick(View view) {
                 //
-                Log.d(LOG_TAG, "finish");
-                finish();
                 Log.d(LOG_TAG, "finish");
                 AddTask.this.finish();
 

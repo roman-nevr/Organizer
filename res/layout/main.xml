@@ -11,8 +11,8 @@
             android:layout_weight="1">
     </ListView>
     <Button
-            android:id="@+id/btnAdd"
+            android:id="@+id/buttonAddTask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btnAdd_name"/>
+            android:text="@string/buttonAddTask_name"/>
 </LinearLayout>

@@ -2,7 +2,23 @@
 <resources>
     <string name="app_name">Organizer</string>
     <string name="task_name">Задачи</string>
-    <string name="btnAdd_name">Добавить</string>
+    <string name="buttonAddTask_name">Добавить</string>
+    <string name="buttonCancel_name">Отменить</string>
+    <string name="tvTaskAddName">Добавить задачу</string>
+    <string name="tvTaskAddDescription">Описание задачи</string>
+    <string name="cmTaskHeader">Выберите действие</string>
+    <string name="cmTaskEdit">Изменить</string>
+    <string name="cmTaskDelete">Удалить</string>
+    <string name="deleteMessage">Удалена задача</string>
+    <string name="deleteNothingMessage">Ничего не удалено</string>
+
+    <string name="tvEditTaskName">Задача</string>
+    <string name="tvEditTaskDescription">Новое описание</string>
+    <string name="buttonSaveEditTask">Сохранить</string>
+    <string name="savedEditMessage">Изменено</string>
+
+    <string name="editTaskErrorMessage">Произошла ошибка, обратитесь к разработчику</string>
+    <string name="nothingToShowMessage">Нечего показывать. Создайте задачи</string>
     <string name="box">Корзина</string>
     <string-array name="names">
         <item>Иван</item>

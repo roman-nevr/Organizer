@@ -1,18 +1,9 @@
 package ru.rubicon21.organizer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import ru.rubicon21.organizer.DAO.GetData;
 import ru.rubicon21.organizer.adapter.MainWindowAdapter;
 import ru.rubicon21.organizer.entity.Task;
 
@@ -33,7 +24,7 @@ public class MainActivity extends Activity {
 
         lvMain = (ListView) findViewById(R.id.lvMain);
         tasks = new ArrayList<Task>();
-        tasks = (new GetData()).getTasks();
+        tasks = (new GetData()).getTestTasks();
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
 
         lvMain.setAdapter(mainWindowAdapter);
@@ -57,7 +48,13 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(this, TaskDetails.class);
+        intent.putExtra("parent_id",0);
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.this.finish();
+    }
 }

@@ -3,9 +3,11 @@ package ru.rubicon21.organizer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
@@ -30,6 +32,16 @@ public class AddTask extends Activity {
         final EditText etTaskAddName = (EditText) findViewById(R.id.etTaskAddName);
         final EditText etTaskAddDescription = (EditText) findViewById(R.id.etTaskAddDescription);
 
+        etTaskAddName.requestFocus();
+        //etTaskAddName.
+
+        /*
+        этот метод не прячет клавиатуру*/
+        final InputMethodManager imm = (InputMethodManager) getSystemService(AddTask.this.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(etTaskAddName, imm.SHOW_IMPLICIT);
+
+
+
         Button buttonSaveTask = (Button) findViewById(R.id.buttonSaveTask);
         Button buttonCancelSaveTask = (Button) findViewById(R.id.buttonCancelSaveTask);
 
@@ -40,6 +52,7 @@ public class AddTask extends Activity {
             @Override
             public void onClick(View view) {
                 //
+                imm.hideSoftInputFromInputMethod(etTaskAddName.getWindowToken(),0);
                 Log.d(LOG_TAG, "et "+etTaskAddName.getText().toString());
                 if (!(TextUtils.isEmpty(etTaskAddName.getText().toString()))) {
                     Task task = new Task(etTaskAddName.getText().toString(), etTaskAddDescription.getText().toString());

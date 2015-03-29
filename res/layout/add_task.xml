@@ -13,7 +13,8 @@
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/etTaskAddName"/>
+            android:id="@+id/etTaskAddName"
+            android:inputType="textCapSentences"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,7 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/etTaskAddDescription"
-            android:layout_weight="0.11"/>
+            android:gravity="top|left"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="3"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

@@ -14,7 +14,7 @@ public class Task {
     int parentId;
     String taskName;
     String taskDescription;
-    int hasChildren;
+    boolean done;
 
     public int getTaskId() {
         return taskId;
@@ -48,12 +48,12 @@ public class Task {
         this.parentId = parentId;
     }
 
-    public int getHasChildren() {
-        return hasChildren;
+    public boolean isDone() {
+        return done;
     }
 
-    public void setHasChildren(int hasChildren) {
-        this.hasChildren = hasChildren;
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
     public Task (String _name, String _description){
@@ -74,6 +74,14 @@ public class Task {
         taskDescription = _description;
     }
 
+    public void doneToggle(){
+        if (this.isDone()){
+            this.setDone(false);
+        }else {
+            this.setDone(true);
+        }
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -81,7 +89,7 @@ public class Task {
                 ", parentId=" + parentId +
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
-                ", hasChildren=" + hasChildren +
+                ", done=" + done +
                 '}';
     }
 }

@@ -8,11 +8,8 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 import ru.rubicon21.organizer.DAO.DataManager;
 import ru.rubicon21.organizer.adapter.MainWindowAdapter;
 import ru.rubicon21.organizer.entity.Task;
@@ -43,23 +40,32 @@ public class TaskDetails extends Activity {
     int parentID;
 
     final int CM_EDIT = 1;
-    final int CM_DELETE = 2;
+    final int CM_DONE = 2;
+    final int CM_DELETE = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         setContentView(R.layout.main);
-        DataManager dm = new DataManager();
 
-        parentID = getIntent().getIntExtra("parent_id", 0);
+        //int res = R.id.lvMain;
 
-        lvMain = (ListView) findViewById(R.id.lvMain);
-
+        LinearLayout llMain = (LinearLayout) findViewById(R.id.llMain);
+        lvMain = (ListView) llMain.findViewById(R.id.lvMain2);
         registerForContextMenu(lvMain);
 
         tasks = new ArrayList<Task>();
 
+        DataManager dm = new DataManager();
+        parentID = getIntent().getIntExtra("parent_id", 0);
         tasks = dm.getTasks(this, parentID);
+
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
 
         Log.d(LOG_TAG,"income parentID : "+parentID+" ");
@@ -111,7 +117,7 @@ public class TaskDetails extends Activity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, view, menuInfo);
-        if (view.getId() == R.id.lvMain){
+        if (view.getId() == R.id.lvMain2){
             /*
             * AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
             * String title = ((MyItem) mAdapter.getItem(info.position)).getTitle();
@@ -119,7 +125,8 @@ public class TaskDetails extends Activity {
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
             String title = ((Task) mainWindowAdapter.getItem(info.position)).getTaskName();
             menu.setHeaderTitle(title);
-            menu.add(0,CM_EDIT,0,R.string.cmTaskEdit);
+            menu.add(0, CM_EDIT, 0, R.string.cmTaskEdit);
+            menu.add(0,CM_DONE,0,R.string.cmTaskDone);
             menu.add(0,CM_DELETE,0,R.string.cmTaskDelete);
 
         }
@@ -140,6 +147,11 @@ public class TaskDetails extends Activity {
 
                 return true;
                // break;
+            case CM_DONE:
+                task.doneToggle();
+                dm.updateTask(TaskDetails.this, task);
+                TaskDetails.this.onResume();
+                return true;
             case CM_DELETE:
                 int deleteResult = dm.deleteTask(TaskDetails.this, task);
                 if (deleteResult >= 1){

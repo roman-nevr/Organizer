@@ -5,6 +5,7 @@ package ru.rubicon21.organizer.adapter;
  */
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,15 @@ public class MainWindowAdapter extends BaseAdapter {
 
         Task task = (Task) getItem(position);
 
-        ((TextView) view.findViewById(R.id.tvTaskName)).setText(task.getTaskName());
+        TextView tvTaskName = (TextView) view.findViewById(R.id.tvTaskName);
+        tvTaskName.setText(task.getTaskName());
         ((TextView) view.findViewById(R.id.tvTaskDescription)).setText(task.getTaskDescription());
+
+        if (task.isDone()){
+            tvTaskName.setPaintFlags(tvTaskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }else {
+            
+        }
         return view;
     }
 

@@ -6,9 +6,12 @@
     <string name="buttonCancel_name">Отменить</string>
     <string name="tvTaskAddName">Добавить задачу</string>
     <string name="tvTaskAddDescription">Описание задачи</string>
+
     <string name="cmTaskHeader">Выберите действие</string>
     <string name="cmTaskEdit">Изменить</string>
+    <string name="cmTaskDone">Завершить</string>
     <string name="cmTaskDelete">Удалить</string>
+
     <string name="deleteMessage">Удалена задача</string>
     <string name="deleteNothingMessage">Ничего не удалено</string>
 

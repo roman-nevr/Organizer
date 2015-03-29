@@ -59,7 +59,8 @@ public class MainWindowAdapter extends BaseAdapter {
         if (task.isDone()){
             tvTaskName.setPaintFlags(tvTaskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }else {
-            
+            tvTaskName.setPaintFlags(tvTaskName.getPaintFlags() &
+                    (Integer.MAX_VALUE - Paint.STRIKE_THRU_TEXT_FLAG));
         }
         return view;
     }

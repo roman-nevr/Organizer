@@ -17,6 +17,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Test"
+                android:textColor="@color/unDonedTaskColor"
                 android:textSize="30sp">
         </TextView>
         <TextView

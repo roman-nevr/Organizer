@@ -5,6 +5,7 @@ package ru.rubicon21.organizer.adapter;
  */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,9 @@ import ru.rubicon21.organizer.entity.Task;
 import java.util.ArrayList;
 
 public class MainWindowAdapter extends BaseAdapter {
+
+    static final int COLOR_DONE = 0x999999;
+    static final int COLOR_UNDONE = 0xFFFFFF;
 
     Context ctx;
     LayoutInflater lInflater;
@@ -54,11 +58,17 @@ public class MainWindowAdapter extends BaseAdapter {
 
         TextView tvTaskName = (TextView) view.findViewById(R.id.tvTaskName);
         tvTaskName.setText(task.getTaskName());
-        ((TextView) view.findViewById(R.id.tvTaskDescription)).setText(task.getTaskDescription());
+        TextView tvTaskDescription = (TextView) view.findViewById(R.id.tvTaskDescription);
+        tvTaskDescription.setText(task.getTaskDescription());
 
         if (task.isDone()){
+
+            tvTaskName.setTextColor(Color.parseColor("#777777"));
+            tvTaskDescription.setTextColor(COLOR_DONE);
             tvTaskName.setPaintFlags(tvTaskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }else {
+            tvTaskName.setTextColor(Color.parseColor("#bbbbbb"));
+            tvTaskDescription.setTextColor(COLOR_UNDONE);
             tvTaskName.setPaintFlags(tvTaskName.getPaintFlags() &
                     (Integer.MAX_VALUE - Paint.STRIKE_THRU_TEXT_FLAG));
         }

@@ -67,7 +67,7 @@ public class AddTask extends Activity {
 
                 } else {
                     Log.d(LOG_TAG, "toast");
-                    Toast.makeText(AddTask.this,"Введите хотя бы имя", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddTask.this,"Введите имя", Toast.LENGTH_SHORT).show();
                 }
             }
         };

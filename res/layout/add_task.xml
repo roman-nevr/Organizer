@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/etTaskAddDescription"
             android:gravity="top|left"
-            android:inputType="textMultiLine|textCapSentences"
+            android:inputType="textMultiLine"
             android:minLines="3"/>
     <LinearLayout
             android:orientation="horizontal"

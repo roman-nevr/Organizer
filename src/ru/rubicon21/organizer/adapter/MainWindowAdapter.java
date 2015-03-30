@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import ru.rubicon21.organizer.DAO.DataManager;
 import ru.rubicon21.organizer.R;
 import ru.rubicon21.organizer.entity.Task;
 
@@ -19,8 +20,10 @@ import java.util.ArrayList;
 
 public class MainWindowAdapter extends BaseAdapter {
 
-    static final int COLOR_DONE = 0x999999;
-    static final int COLOR_UNDONE = 0xFFFFFF;
+    DataManager dm = new DataManager();
+
+    final String COLOR_DONE = "#777777";
+    final String COLOR_UNDONE = "#bbbbbb";
 
     Context ctx;
     LayoutInflater lInflater;
@@ -63,15 +66,25 @@ public class MainWindowAdapter extends BaseAdapter {
 
         if (task.isDone()){
 
-            tvTaskName.setTextColor(Color.parseColor("#777777"));
-            tvTaskDescription.setTextColor(COLOR_DONE);
+            tvTaskName.setTextColor(Color.parseColor(COLOR_DONE));
+            tvTaskDescription.setTextColor(Color.parseColor(COLOR_DONE));
             tvTaskName.setPaintFlags(tvTaskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }else {
-            tvTaskName.setTextColor(Color.parseColor("#bbbbbb"));
-            tvTaskDescription.setTextColor(COLOR_UNDONE);
+            tvTaskName.setTextColor(Color.parseColor(COLOR_UNDONE));
+            tvTaskDescription.setTextColor(Color.parseColor(COLOR_UNDONE));
             tvTaskName.setPaintFlags(tvTaskName.getPaintFlags() &
                     (Integer.MAX_VALUE - Paint.STRIKE_THRU_TEXT_FLAG));
         }
+
+        ImageView ivHasChild = (ImageView) view.findViewById(R.id.ivHasChild);
+        if (dm.hasChildren(ctx, task)){
+            ivHasChild.setVisibility(View.VISIBLE);
+        }else{
+            ivHasChild.setVisibility(View.INVISIBLE);
+        }
+
+
+
         return view;
     }
 

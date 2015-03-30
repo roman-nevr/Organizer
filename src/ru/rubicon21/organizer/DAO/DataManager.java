@@ -192,6 +192,21 @@ public class DataManager {
         return num;
     }
 
+    public boolean hasChildren (Context context, Task task){
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int parentId = task.getTaskId();
+        String selection = DB_PARENT_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(parentId)};
+        Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        if (cursor.moveToFirst()){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
     /*
     PK
     |id|parent_id|name|description|has_children|

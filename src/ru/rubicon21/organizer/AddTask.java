@@ -48,6 +48,11 @@ public class AddTask extends Activity {
         Intent intent = getIntent();
         final int parentId = intent.getIntExtra("parent_id",0);
 
+        if (parentId != 0){
+            setTitle(dm.getTask(this, parentId).getTaskName());
+        }
+
+
         OnClickListener onClickButtonSaveTask = new OnClickListener() {
             @Override
             public void onClick(View view) {

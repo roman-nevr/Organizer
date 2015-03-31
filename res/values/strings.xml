@@ -4,7 +4,7 @@
     <string name="task_name">Задачи</string>
     <string name="buttonAddTask_name">Добавить</string>
     <string name="buttonCancel_name">Отменить</string>
-    <string name="tvTaskAddName">Добавить задачу</string>
+    <string name="tvTaskAddName">Новая задача</string>
     <string name="tvTaskAddDescription">Описание задачи</string>
 
     <string name="cmTaskHeader">Выберите действие</string>

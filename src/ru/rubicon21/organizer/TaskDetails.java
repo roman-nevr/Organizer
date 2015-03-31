@@ -1,14 +1,12 @@
 package ru.rubicon21.organizer;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.*;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import ru.rubicon21.organizer.DAO.DataManager;
@@ -35,6 +33,8 @@ public class TaskDetails extends Activity {
     final String LOG_TAG = "myLogs";
     ListView lvMain;
 
+    float xDown, yDown;
+
     MainWindowAdapter mainWindowAdapter;
     ArrayList<Task> tasks;
 
@@ -44,22 +44,50 @@ public class TaskDetails extends Activity {
     final int CM_DONE = 2;
     final int CM_DELETE = 3;
 
+    final float minSwaip = (float) 0.2;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
         setContentView(R.layout.main);
 
         //int res = R.id.lvMain;
 
         LinearLayout llMain = (LinearLayout) findViewById(R.id.llMain);
-        lvMain = (ListView) llMain.findViewById(R.id.lvMain2);
+        lvMain = (ListView) llMain.findViewById(R.id.lvMain);
         registerForContextMenu(lvMain);
+
+        //final int llMainWidth = llMain.getWidth();
+
+        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+        final int layoutWidth = display.getWidth();
+
+        //lvMain.setOnTouchListener(this);
+        lvMain.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //Log.d(LOG_TAG, "motion event "+motionEvent.toString());
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        xDown = motionEvent.getX();
+                        yDown = motionEvent.getY();
+                        return true;
+                        //break;
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                        //break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        float ratio = (motionEvent.getX()-xDown)/layoutWidth;
+                        if (ratio >= minSwaip){
+                            TaskDetails.this.finish();
+                            return true;
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
 
         tasks = new ArrayList<Task>();
 
@@ -121,7 +149,7 @@ public class TaskDetails extends Activity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, view, menuInfo);
-        if (view.getId() == R.id.lvMain2){
+        if (view.getId() == R.id.lvMain){
             /*
             * AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
             * String title = ((MyItem) mAdapter.getItem(info.position)).getTitle();
@@ -172,6 +200,5 @@ public class TaskDetails extends Activity {
             default:
                 return super.onContextItemSelected(item);
         }
-
     }
 }

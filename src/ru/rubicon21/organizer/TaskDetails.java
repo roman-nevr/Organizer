@@ -1,6 +1,7 @@
 package ru.rubicon21.organizer;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,6 +70,9 @@ public class TaskDetails extends Activity {
         mainWindowAdapter = new MainWindowAdapter(this,tasks);
 
         Log.d(LOG_TAG,"income parentID : "+parentID+" ");
+        if (parentID != 0){
+            TaskDetails.this.setTitle(dm.getTask(this, parentID).getTaskName());
+        }
 
         Button buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
         View.OnClickListener onClickListenerButtonAddTask = new View.OnClickListener() {

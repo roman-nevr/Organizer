@@ -199,12 +199,15 @@ public class DataManager {
         String selection = DB_PARENT_ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(parentId)};
         Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        boolean result;
         if (cursor.moveToFirst()){
-            return true;
+            result = true;
         }else {
-            return false;
+            result = false;
         }
-
+        cursor.close();
+        db.close();
+        return result;
     }
 
     /*

@@ -46,6 +46,9 @@ public class TaskDetails extends Activity {
 
     final float minSwaip = (float) 0.2;
 
+    final long delay = 300;
+    long timeDown;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +69,13 @@ public class TaskDetails extends Activity {
         lvMain.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //Log.d(LOG_TAG, "motion event "+motionEvent.toString());
+                Log.d(LOG_TAG, "motion event "+motionEvent.toString());
                 switch (motionEvent.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         xDown = motionEvent.getX();
                         yDown = motionEvent.getY();
+                        System.currentTimeMillis();
+                        //http://hashcode.ru/questions/25779/java-%D1%82%D0%B0%D0%B9%D0%BC%D0%B5%D1%80-%D0%B2-android-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B8
                         return true;
                         //break;
                     case MotionEvent.ACTION_MOVE:

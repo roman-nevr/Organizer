@@ -3,6 +3,7 @@ package ru.rubicon21.organizer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -44,10 +45,10 @@ public class TaskDetails extends Activity {
     final int CM_DONE = 2;
     final int CM_DELETE = 3;
 
-    final float minSwaip = (float) 0.2;
+    final float minSwipe = (float) 0.2;
 
     final long delay = 300;
-    long timeDown;
+    boolean timeOut;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,24 +70,35 @@ public class TaskDetails extends Activity {
         lvMain.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.d(LOG_TAG, "motion event "+motionEvent.toString());
-                switch (motionEvent.getAction()){
+                Log.d(LOG_TAG, "motion event " + motionEvent.toString());
+                WaitingTimer timer = new WaitingTimer(delay, delay);
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         xDown = motionEvent.getX();
                         yDown = motionEvent.getY();
-                        System.currentTimeMillis();
+                        timeOut = false;
+                        timer.start();
+                        Log.d(LOG_TAG, "timer start");
                         //http://hashcode.ru/questions/25779/java-%D1%82%D0%B0%D0%B9%D0%BC%D0%B5%D1%80-%D0%B2-android-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B8
                         return true;
-                        //break;
+                    //break;
                     case MotionEvent.ACTION_MOVE:
+                        timer.cancel();
+                        timeOut = false;
+                        Log.d(LOG_TAG, "timer cancel");
                         return true;
-                        //break;
+                    //break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        float ratio = (motionEvent.getX()-xDown)/layoutWidth;
-                        if (ratio >= minSwaip){
-                            TaskDetails.this.finish();
-                            return true;
+                        if (!timeOut) {
+                            float ratio = (motionEvent.getX() - xDown) / layoutWidth;
+                            if (ratio >= minSwipe) {
+                                TaskDetails.this.finish();
+                                return true;
+                            }
+                        } else {
+                            openContextMenu(TaskDetails.this.lvMain);
+                            return false;
                         }
                         break;
                 }
@@ -204,6 +216,23 @@ public class TaskDetails extends Activity {
                // break;
             default:
                 return super.onContextItemSelected(item);
+        }
+    }
+
+    class WaitingTimer extends CountDownTimer {
+
+        public WaitingTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+        }
+
+        @Override
+        public void onFinish() {
+            timeOut = true;
+            Log.d(LOG_TAG, "timer finish");
         }
     }
 }

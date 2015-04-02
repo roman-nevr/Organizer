@@ -192,6 +192,37 @@ public class DataManager {
         return num;
     }
 
+    public int deleteTaskRecursive(Context context, Task task){
+        //написать удаление строк
+        /* http://developer.android.com/training/basics/data-storage/databases.html
+        // Define 'where' part of query.
+        String selection = FeedEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(rowId) };
+        // Issue SQL statement.
+        db.delete(table_name, selection, selectionArgs);
+        */
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (hasChildren(context, task)){
+            String selectionForChildren = DB_PARENT_ID + " LIKE ?";
+            String[] selectionArgsForChildren = {String.valueOf(task.getTaskId())};
+            Cursor cursor = db.query(DB_TABLE_NAME, null, selectionForChildren, selectionArgsForChildren, null, null, null);
+            if (cursor.moveToFirst()){
+                int idColumnIndex = cursor.getColumnIndex(DB_TASK_ID);
+                do{
+                    deleteTaskRecursive(context, getTask(context, cursor.getInt(idColumnIndex)));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+        String selection = DB_TASK_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(task.getTaskId())};
+        int num = db.delete(DB_TABLE_NAME,selection,selectionArgs);
+        db.close();
+        return num;
+    }
+
     public boolean hasChildren (Context context, Task task){
         dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();

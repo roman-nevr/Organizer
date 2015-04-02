@@ -1,0 +1,10 @@
+<resources>
+
+    <style name="DownUpActivity">
+        <item name="android:activityOpenEnterAnimation">@anim/in_open</item>
+        <item name="android:activityOpenExitAnimation">@anim/in_close</item>
+        <item name="android:activityCloseExitAnimation">@anim/out_close</item>
+        <item name="android:activityCloseEnterAnimation">@anim/out_open</item>
+    </style>
+
+</resources>

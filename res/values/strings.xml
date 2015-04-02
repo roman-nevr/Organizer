@@ -22,6 +22,12 @@
 
     <string name="editTaskErrorMessage">Произошла ошибка, обратитесь к разработчику</string>
     <string name="nothingToShowMessage">Нечего показывать. Создайте задачи</string>
+
+    <string name="dialogDeleteTitle">Удалить задачу?</string>
+    <string name="dialogDeleteDescription">Безвозвратное удаление задачи и всех подзадач</string>
+    <string name="dialogDeleteOk">Да</string>
+    <string name="dialogDeleteCancel">Пока не надо</string>
+
     <string name="box">Корзина</string>
     <string-array name="names">
         <item>Иван</item>

@@ -15,6 +15,7 @@ public class Task {
     String taskName;
     String taskDescription;
     boolean done;
+    int priority;
 
     public int getTaskId() {
         return taskId;
@@ -54,6 +55,14 @@ public class Task {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public Task (String _name, String _description){

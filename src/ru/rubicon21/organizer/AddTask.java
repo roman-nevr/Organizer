@@ -57,7 +57,7 @@ public class AddTask extends Activity {
             @Override
             public void onClick(View view) {
                 //
-                imm.hideSoftInputFromInputMethod(etTaskAddName.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(etTaskAddName.getWindowToken(),0);
                 Log.d(LOG_TAG, "et "+etTaskAddName.getText().toString());
                 if (!(TextUtils.isEmpty(etTaskAddName.getText().toString()))) {
                     Task task = new Task(etTaskAddName.getText().toString(), etTaskAddDescription.getText().toString());
@@ -82,6 +82,7 @@ public class AddTask extends Activity {
             public void onClick(View view) {
                 //
                 Log.d(LOG_TAG, "finish");
+                imm.hideSoftInputFromWindow(etTaskAddName.getWindowToken(),0);
                 AddTask.this.finish();
 
             }

@@ -1,6 +1,9 @@
 package ru.rubicon21.organizer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -33,6 +36,7 @@ import java.util.ArrayList;
 public class TaskDetails extends Activity {
     final String LOG_TAG = "myLogs";
     ListView lvMain;
+    LinearLayout llMain;
 
     float xDown, yDown;
 
@@ -45,6 +49,8 @@ public class TaskDetails extends Activity {
     final int CM_DONE = 2;
     final int CM_DELETE = 3;
 
+    final int DIALOG_DELETE = 1;
+
     final float minSwipe = (float) 0.2;
 
     final long delay = 300;
@@ -56,9 +62,21 @@ public class TaskDetails extends Activity {
         setContentView(R.layout.main);
 
         //int res = R.id.lvMain;
+        LayoutInflater ltInflater = getLayoutInflater();
 
-        LinearLayout llMain = (LinearLayout) findViewById(R.id.llMain);
-        lvMain = (ListView) llMain.findViewById(R.id.lvMain);
+
+        llMain = (LinearLayout) findViewById(R.id.llMain);
+        if (llMain == null){
+
+            llMain = (LinearLayout) ltInflater.inflate(R.layout.main, null, false);
+            Log.d(LOG_TAG, "fail");
+            Log.d(LOG_TAG, llMain.toString());
+        }
+        lvMain = (ListView) findViewById(R.id.lvMain);
+        if (lvMain == null){
+            //lvMain = (ListView) ltInflater.inflate(R.id.lvMain, llMain, true );
+            Log.d(LOG_TAG, "fail again");
+        }
         registerForContextMenu(lvMain);
 
         //final int llMainWidth = llMain.getWidth();
@@ -80,13 +98,13 @@ public class TaskDetails extends Activity {
                         timer.start();
                         Log.d(LOG_TAG, "timer start");
                         //http://hashcode.ru/questions/25779/java-%D1%82%D0%B0%D0%B9%D0%BC%D0%B5%D1%80-%D0%B2-android-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B8
-                        return true;
+                        return false;
                     //break;
                     case MotionEvent.ACTION_MOVE:
                         timer.cancel();
                         timeOut = false;
                         Log.d(LOG_TAG, "timer cancel");
-                        return true;
+                        return false;
                     //break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -97,7 +115,7 @@ public class TaskDetails extends Activity {
                                 return true;
                             }
                         } else {
-                            openContextMenu(TaskDetails.this.lvMain);
+                            //openContextMenu(TaskDetails.this.lvMain);
                             return false;
                         }
                         break;
@@ -127,6 +145,7 @@ public class TaskDetails extends Activity {
                 intent.putExtra("parent_id",parentID);
                 Log.d(LOG_TAG, "out parent_id : " + parentID + " ");
                 startActivity(intent);
+               // overridePendingTransition(R.anim.in_open, R.anim.in_close);
             }
         };
         buttonAddTask.setOnClickListener(onClickListenerButtonAddTask);
@@ -143,6 +162,7 @@ public class TaskDetails extends Activity {
                     Intent intent = new Intent(TaskDetails.this, TaskDetails.class);
                     intent.putExtra("parent_id", (tasks.get(position)).getTaskId());
                     startActivity(intent);
+                   // overridePendingTransition(R.anim.in_open, R.anim.in_close);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("NPE");
@@ -154,6 +174,7 @@ public class TaskDetails extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        int i =TaskDetails.this.lvMain.getHeight();
         DataManager dm = new DataManager();
         //parentID = getIntent().getIntExtra("parent_id", 0);
         tasks = dm.getTasks(TaskDetails.this, TaskDetails.this.parentID);
@@ -167,10 +188,7 @@ public class TaskDetails extends Activity {
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, view, menuInfo);
         if (view.getId() == R.id.lvMain){
-            /*
-            * AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-            * String title = ((MyItem) mAdapter.getItem(info.position)).getTitle();
-            */
+
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
             String title = ((Task) mainWindowAdapter.getItem(info.position)).getTaskName();
             menu.setHeaderTitle(title);
@@ -183,16 +201,17 @@ public class TaskDetails extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        DataManager dm = new DataManager();
+        final DataManager dm = new DataManager();
         //return super.onContextItemSelected(item);
         //AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         int position = ((AdapterContextMenuInfo) item.getMenuInfo()).position;
-        Task task = this.tasks.get(position);
+        final Task task = this.tasks.get(position);
         switch (item.getItemId()){
             case CM_EDIT:
                 Intent outIntent = new Intent(TaskDetails.this, EditTask.class);
                 outIntent.putExtra("task_id", task.getTaskId());
                 startActivity(outIntent);
+                //overridePendingTransition(R.anim.in_open,R.anim.in_close);
 
                 return true;
                // break;
@@ -202,21 +221,37 @@ public class TaskDetails extends Activity {
                 TaskDetails.this.onResume();
                 return true;
             case CM_DELETE:
-                int deleteResult = dm.deleteTask(TaskDetails.this, task);
-                if (deleteResult >= 1){
-                    Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteMessage)+" "+task.getTaskName(),
-                            Toast.LENGTH_LONG).show();
-                    TaskDetails.this.onResume();
-                }else {
-                    Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteNothingMessage)+" "+task.getTaskName(),
-                            Toast.LENGTH_LONG).show();
-                }
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage(R.string.dialogDeleteDescription);
+                alertDialogBuilder.setPositiveButton(R.string.dialogDeleteOk, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int deleteResult = dm.deleteTaskRecursive(TaskDetails.this, task);
+                        if (deleteResult >= 1){
+                            Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteMessage)+" "+task.getTaskName(),
+                                    Toast.LENGTH_LONG).show();
+                            TaskDetails.this.onResume();
+                        }else {
+                            Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteNothingMessage)+" "+task.getTaskName(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.dialogDeleteCancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
+                    }
+                });
+                alertDialogBuilder.show();
+                Log.d(LOG_TAG, "open dialog");
                 return true;
                // break;
             default:
                 return super.onContextItemSelected(item);
         }
+
+
     }
 
     class WaitingTimer extends CountDownTimer {
@@ -235,4 +270,45 @@ public class TaskDetails extends Activity {
             Log.d(LOG_TAG, "timer finish");
         }
     }
+/*
+    @Override
+    protected Dialog onCreateDialog(int id, Bundle bundle) {
+        if (id == DIALOG_DELETE){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage(R.string.dialogDeleteDescription);
+            alertDialogBuilder.setPositiveButton(R.string.dialogDeleteOk, dialogDeleteListener);
+            alertDialogBuilder.setNegativeButton(R.string.dialogDeleteCancel, dialogDeleteListener);
+           // alertDialogBuilder.
+            return alertDialogBuilder.create();
+        }
+        return super.onCreateDialog(id);
+    }
+
+    DialogInterface.OnClickListener dialogDeleteListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int id) {
+            switch (id){
+                case Dialog.BUTTON_POSITIVE:
+                    Task itemId = (Task) TaskDetails.this.lvMain.get
+                    //Task task = TaskDetails.this.tasks.get(itemId);
+                    DataManager dm = new DataManager();
+                    int deleteResult = dm.deleteTask(TaskDetails.this, task);
+                    if (deleteResult >= 1){
+                        Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteMessage)+" "+task.getTaskName(),
+                                Toast.LENGTH_LONG).show();
+                        TaskDetails.this.onResume();
+                    }else {
+                        Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteNothingMessage)+" "+task.getTaskName(),
+                                Toast.LENGTH_LONG).show();
+                    break;
+                case Dialog.BUTTON_NEGATIVE:
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    };*/
+
+    //конец TaskDetails
 }

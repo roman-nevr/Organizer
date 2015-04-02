@@ -19,7 +19,7 @@ public class DataManager {
 
     DBHelper dbHelper;
 
-    final int DB_VERSION = 2;
+    final int DB_VERSION = 3;
 
     final String DB_NAME = "taskDB";
     final String DB_TABLE_NAME = "tasks";
@@ -28,6 +28,7 @@ public class DataManager {
     final String DB_TASK_NAME = "name";
     final String DB_TASK_DESCRIPTION = "description";
     final String DB_TASK_DONE = "done";
+    final String DB_TASK_PRIORITY = "priority";
 
     final String LOG_TAG = "myLogs";
 
@@ -53,14 +54,17 @@ public class DataManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String selection = DB_PARENT_ID+" LIKE ?";
         String[] selectionArgs = {String.valueOf(_parent_id)};
-        String orderByDone = DB_TASK_DONE;
-        Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, orderByDone);
+        //String orderByPriority = DB_TASK_DONE+","+ DB_TASK_PRIORITY+" DESC";
+        String orderByPriority =DB_TASK_PRIORITY+" DESC,"+ DB_TASK_DONE;
+        String groupByDone = DB_TASK_DONE;
+        Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, orderByPriority);
         if (cursor.moveToFirst()){
             int idColumnIndex = cursor.getColumnIndex(DB_TASK_ID);
             int parentIdColumnIndex = cursor.getColumnIndex(DB_PARENT_ID);
             int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
             int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
             int doneColumnIndex = cursor.getColumnIndex(DB_TASK_DONE);
+            int priorityColumnIndex = cursor.getColumnIndex(DB_TASK_PRIORITY);
             do{
                 Task task = new Task(
                         cursor.getInt(idColumnIndex),
@@ -72,6 +76,7 @@ public class DataManager {
                 }else {
                     task.setDone(false);
                 }
+                task.setPriority(cursor.getInt(priorityColumnIndex));
                 tasks.add(task);
             }while (cursor.moveToNext());
         }else {
@@ -96,6 +101,7 @@ public class DataManager {
             int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
             int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
             int doneColumnIndex = cursor.getColumnIndex(DB_TASK_DONE);
+            int priorityColumnIndex = cursor.getColumnIndex(DB_TASK_PRIORITY);
             task =  new Task(
                     cursor.getInt(idColumnIndex),
                     cursor.getInt(parentIdColumnIndex),
@@ -106,6 +112,7 @@ public class DataManager {
             }else {
                 task.setDone(false);
             }
+            task.setPriority(cursor.getInt(priorityColumnIndex));
             //task.setParentId(cursor.getInt(parentIdColumnIndex));
 
         }else {
@@ -123,6 +130,7 @@ public class DataManager {
         contentValues.put(DB_PARENT_ID, task.getParentId());
         contentValues.put(DB_TASK_NAME, task.getTaskName());
         contentValues.put(DB_TASK_DESCRIPTION, task.getTaskDescription());
+        contentValues.put(DB_TASK_PRIORITY, task.getPriority());
         if (task.isDone()){
             contentValues.put(DB_TASK_DONE, 1);
         }else {
@@ -156,6 +164,7 @@ public class DataManager {
         //contentValues.put(DB_PARENT_ID, task.getParentId());
         contentValues.put(DB_TASK_NAME, task.getTaskName());
         contentValues.put(DB_TASK_DESCRIPTION, task.getTaskDescription());
+        contentValues.put(DB_TASK_PRIORITY, task.getPriority());
         if (task.isDone()){
             contentValues.put(DB_TASK_DONE, 1);
         }else {
@@ -244,6 +253,8 @@ public class DataManager {
     /*
     PK
     |id|parent_id|name|description|has_children|
+    |id|parent_id|name|description|done|
+    |id|parent_id|name|description|done|priority
     */
 
     class DBHelper extends SQLiteOpenHelper {
@@ -264,14 +275,15 @@ public class DataManager {
                     + DB_PARENT_ID+" integer,"
                     + DB_TASK_NAME+" text,"
                     + DB_TASK_DESCRIPTION+" text,"
-                    + DB_TASK_DONE+" integer"
+                    + DB_TASK_DONE+" integer,"
+                    + DB_TASK_PRIORITY+" integer"
                     + ");");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             if ((oldVersion == 1) && (newVersion == 2)){
-                ContentValues contentValues = new ContentValues();
+                //ContentValues contentValues = new ContentValues();
                 db.beginTransaction();
                 try {
                     //
@@ -313,8 +325,19 @@ public class DataManager {
                     db.endTransaction();
 
                 }
-            }
-        }
-    }
+            }//end first if
+            if ((oldVersion == 2) && (newVersion == 3)){
+                //ContentValues contentValues = new ContentValues();
+                db.beginTransaction();
+                try {
+                    db.execSQL("alter table "+DB_TABLE_NAME+" add column "+DB_TASK_PRIORITY+" integer;");
+                    db.setTransactionSuccessful();
+                }finally {
+                    db.endTransaction();
+                }
+            }//end second if
+        }//end onUpgrade
 
-}
+    }//end DBHelper
+
+}//end class

@@ -6,10 +6,13 @@
     <string name="buttonCancel_name">Отменить</string>
     <string name="tvTaskAddName">Новая задача</string>
     <string name="tvTaskAddDescription">Описание задачи</string>
+    <string name="tvTaskPriority">Приоритет</string>
+    <string name="tvTaskPriorityDescription">0 - средний приоритет. Отрицательный для уменьшения, положительный для увеличения</string>
 
     <string name="cmTaskHeader">Выберите действие</string>
     <string name="cmTaskEdit">Изменить</string>
     <string name="cmTaskDone">Завершить</string>
+    <string name="cmTaskContinue">Вернуть</string>
     <string name="cmTaskDelete">Удалить</string>
 
     <string name="deleteMessage">Удалена задача</string>

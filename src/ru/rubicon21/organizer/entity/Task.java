@@ -99,6 +99,7 @@ public class Task {
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
                 ", done=" + done +
+                ", priority=" + priority +
                 '}';
     }
 }

@@ -190,10 +190,15 @@ public class TaskDetails extends Activity {
         if (view.getId() == R.id.lvMain){
 
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-            String title = ((Task) mainWindowAdapter.getItem(info.position)).getTaskName();
+            Task task = (Task) mainWindowAdapter.getItem(info.position);
+            String title = task.getTaskName();
             menu.setHeaderTitle(title);
             menu.add(0, CM_EDIT, 0, R.string.cmTaskEdit);
-            menu.add(0,CM_DONE,0,R.string.cmTaskDone);
+            if (task.isDone()){
+                menu.add(0,CM_DONE,0,R.string.cmTaskContinue);
+            }else {
+                menu.add(0,CM_DONE,0,R.string.cmTaskDone);
+            }
             menu.add(0,CM_DELETE,0,R.string.cmTaskDelete);
 
         }
@@ -270,45 +275,7 @@ public class TaskDetails extends Activity {
             Log.d(LOG_TAG, "timer finish");
         }
     }
-/*
-    @Override
-    protected Dialog onCreateDialog(int id, Bundle bundle) {
-        if (id == DIALOG_DELETE){
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage(R.string.dialogDeleteDescription);
-            alertDialogBuilder.setPositiveButton(R.string.dialogDeleteOk, dialogDeleteListener);
-            alertDialogBuilder.setNegativeButton(R.string.dialogDeleteCancel, dialogDeleteListener);
-           // alertDialogBuilder.
-            return alertDialogBuilder.create();
-        }
-        return super.onCreateDialog(id);
-    }
 
-    DialogInterface.OnClickListener dialogDeleteListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int id) {
-            switch (id){
-                case Dialog.BUTTON_POSITIVE:
-                    Task itemId = (Task) TaskDetails.this.lvMain.get
-                    //Task task = TaskDetails.this.tasks.get(itemId);
-                    DataManager dm = new DataManager();
-                    int deleteResult = dm.deleteTask(TaskDetails.this, task);
-                    if (deleteResult >= 1){
-                        Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteMessage)+" "+task.getTaskName(),
-                                Toast.LENGTH_LONG).show();
-                        TaskDetails.this.onResume();
-                    }else {
-                        Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteNothingMessage)+" "+task.getTaskName(),
-                                Toast.LENGTH_LONG).show();
-                    break;
-                case Dialog.BUTTON_NEGATIVE:
-
-                    break;
-                default:
-                    break;
-            }
-        }
-    };*/
 
     //конец TaskDetails
 }

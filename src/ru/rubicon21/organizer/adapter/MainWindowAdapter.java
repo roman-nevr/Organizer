@@ -56,6 +56,7 @@ public class MainWindowAdapter extends BaseAdapter {
         if (view == null){
             view = lInflater.inflate(R.layout.item, viewGroup, false);
         }
+        //
 
         Task task = (Task) getItem(position);
 

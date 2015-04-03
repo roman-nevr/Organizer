@@ -5,6 +5,8 @@
 
 ## File-based project format:
 *.iws
+*.apk
+.navigation/*
 
 /out/*
 

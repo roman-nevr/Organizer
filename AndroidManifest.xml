@@ -6,16 +6,27 @@
     <uses-sdk android:minSdkVersion="10"/>
     <application android:label="@string/app_name">
         <activity android:name="MainActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AnimationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".TaskDetails"
-                  android:label="@string/task_name"/>
-        <activity android:name=".AddTask" android:label="Добавить задачу"/>
-        <activity android:name=".EditTask"/>
+                  android:label="@string/task_name"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateAlwaysHidden"
+                  android:theme="@style/AnimationActivity"/>
+        <activity android:name=".AddTask"
+                  android:label="Добавить задачу"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateVisible|adjustPan"
+                  android:theme="@style/AnimationActivity"/>
+        <activity android:name=".EditTask"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AnimationActivity"/>
 
     </application>
 </manifest> 

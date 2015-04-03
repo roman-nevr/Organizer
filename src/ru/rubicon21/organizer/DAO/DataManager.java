@@ -54,8 +54,8 @@ public class DataManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String selection = DB_PARENT_ID+" LIKE ?";
         String[] selectionArgs = {String.valueOf(_parent_id)};
-        //String orderByPriority = DB_TASK_DONE+","+ DB_TASK_PRIORITY+" DESC";
-        String orderByPriority =DB_TASK_PRIORITY+" DESC,"+ DB_TASK_DONE;
+        String orderByPriority = DB_TASK_DONE+" ASC,"+ DB_TASK_PRIORITY+" DESC";
+        //String orderByPriority =DB_TASK_PRIORITY+" DESC,"+ DB_TASK_DONE;
         String groupByDone = DB_TASK_DONE;
         Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, orderByPriority);
         if (cursor.moveToFirst()){

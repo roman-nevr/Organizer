@@ -49,12 +49,13 @@ public class TaskDetails extends Activity {
     final int CM_DONE = 2;
     final int CM_DELETE = 3;
 
-    final int DIALOG_DELETE = 1;
-
     final float minSwipe = (float) 0.2;
 
     final long delay = 300;
     boolean timeOut;
+
+    static boolean nextActivityWasOpened = false;
+    static int numberActivityWasOpened = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,12 @@ public class TaskDetails extends Activity {
                                 TaskDetails.this.finish();
                                 return true;
                             }
+                            ratio = (xDown - motionEvent.getX()) / layoutWidth;
+                            if ((ratio >= minSwipe) && nextActivityWasOpened){
+                                Intent intent = new Intent(TaskDetails.this, TaskDetails.class);
+                                intent.putExtra("parent_id", numberActivityWasOpened);
+                                startActivity(intent);
+                            }
                         } else {
                             //openContextMenu(TaskDetails.this.lvMain);
                             return false;
@@ -161,6 +168,8 @@ public class TaskDetails extends Activity {
                 try {
                     Intent intent = new Intent(TaskDetails.this, TaskDetails.class);
                     intent.putExtra("parent_id", (tasks.get(position)).getTaskId());
+                    nextActivityWasOpened = true;
+                    numberActivityWasOpened = (tasks.get(position)).getTaskId();
                     startActivity(intent);
                    // overridePendingTransition(R.anim.in_open, R.anim.in_close);
                 } catch (Exception e) {

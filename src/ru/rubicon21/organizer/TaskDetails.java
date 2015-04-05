@@ -2,7 +2,6 @@ package ru.rubicon21.organizer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,14 +47,15 @@ public class TaskDetails extends Activity {
     final int CM_EDIT = 1;
     final int CM_DONE = 2;
     final int CM_DELETE = 3;
+    final int CM_REPLACE = 4;
 
     final float minSwipe = (float) 0.2;
 
     final long delay = 300;
     boolean timeOut;
 
-    static boolean nextActivityWasOpened = false;
-    static int numberActivityWasOpened = 0;
+    boolean nextActivityWasOpened = false;
+    int numberActivityWasOpened = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -209,6 +209,8 @@ public class TaskDetails extends Activity {
                 menu.add(0,CM_DONE,0,R.string.cmTaskDone);
             }
             menu.add(0,CM_DELETE,0,R.string.cmTaskDelete);
+            menu.add(0,CM_REPLACE,0,R.string.cmTaskReplace);
+
 
         }
     }
@@ -220,9 +222,10 @@ public class TaskDetails extends Activity {
         //AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         int position = ((AdapterContextMenuInfo) item.getMenuInfo()).position;
         final Task task = this.tasks.get(position);
+        Intent outIntent;
         switch (item.getItemId()){
             case CM_EDIT:
-                Intent outIntent = new Intent(TaskDetails.this, EditTask.class);
+                outIntent = new Intent(TaskDetails.this, EditTask.class);
                 outIntent.putExtra("task_id", task.getTaskId());
                 startActivity(outIntent);
                 //overridePendingTransition(R.anim.in_open,R.anim.in_close);
@@ -231,18 +234,19 @@ public class TaskDetails extends Activity {
                // break;
             case CM_DONE:
                 task.doneToggle();
-                dm.updateTask(TaskDetails.this, task);
+                dm.updateTaskById(TaskDetails.this, task);
                 TaskDetails.this.onResume();
                 return true;
             case CM_DELETE:
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage(R.string.dialogDeleteDescription);
-                alertDialogBuilder.setPositiveButton(R.string.dialogDeleteOk, new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setTitle(R.string.dialogDeleteTitle);
+                alertDialogBuilder.setMessage(R.string.dialogDeleteMessage);
+                alertDialogBuilder.setPositiveButton(R.string.dialogOk, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int deleteResult = dm.deleteTaskRecursive(TaskDetails.this, task);
                         if (deleteResult >= 1){
-                            Toast.makeText(TaskDetails.this,getResources().getString(R.string.deleteMessage)+" "+task.getTaskName(),
+                            Toast.makeText(TaskDetails.this,getResources().getString(R.string.toastDeleteMessage)+" "+task.getTaskName(),
                                     Toast.LENGTH_LONG).show();
                             TaskDetails.this.onResume();
                         }else {
@@ -251,7 +255,7 @@ public class TaskDetails extends Activity {
                         }
                     }
                 });
-                alertDialogBuilder.setNegativeButton(R.string.dialogDeleteCancel, new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -260,6 +264,10 @@ public class TaskDetails extends Activity {
                 alertDialogBuilder.show();
                 Log.d(LOG_TAG, "open dialog");
                 return true;
+            case CM_REPLACE:
+                outIntent = new Intent(TaskDetails.this, TaskReplace.class);
+                outIntent.putExtra("task_id",task.getTaskId());
+                startActivity(outIntent);
                // break;
             default:
                 return super.onContextItemSelected(item);
@@ -285,6 +293,10 @@ public class TaskDetails extends Activity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     //конец TaskDetails
 }

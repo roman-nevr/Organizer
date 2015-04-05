@@ -1,5 +1,7 @@
 package ru.rubicon21.organizer.entity;
 
+import java.util.HashMap;
+
 /**
  * Created by roma on 15.03.2015.
  */
@@ -16,6 +18,17 @@ public class Task {
     String taskDescription;
     boolean done;
     int priority;
+
+    static final public String DB_NAME = "taskDB";
+    static final public String DB_TABLE_NAME = "tasks";
+    static final public String DB_TASK_ID = "id";
+    static final public String DB_PARENT_ID = "parent_id";
+    static final public String DB_TASK_NAME = "name";
+    static final public String DB_TASK_DESCRIPTION = "description";
+    static final public String DB_TASK_DONE = "done";
+    static final public String DB_TASK_PRIORITY = "priority";
+
+
 
     public int getTaskId() {
         return taskId;

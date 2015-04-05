@@ -4,7 +4,8 @@
           android:versionCode="1"
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="10"/>
-    <application android:label="@string/app_name">
+    <application android:label="@string/app_name"
+                 android:screenOrientation="portrait">
         <activity android:name="MainActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"
@@ -18,15 +19,22 @@
                   android:label="@string/task_name"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateAlwaysHidden"
-                  android:theme="@style/AnimationActivity"/>
+                  android:theme="@style/AnimationActivity"
+                  />
         <activity android:name=".AddTask"
                   android:label="Добавить задачу"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateVisible|adjustPan"
-                  android:theme="@style/AnimationActivity"/>
+                  android:theme="@style/AnimationActivity"
+                  />
         <activity android:name=".EditTask"
                   android:screenOrientation="portrait"
-                  android:theme="@style/AnimationActivity"/>
+                  android:theme="@style/AnimationActivity"
+                  />
+        <activity android:name=".TaskReplace"
+                  android:label="@string/labelTaskReplace"
+                  android:theme="@style/AnimationActivity"
+                  />
 
     </application>
 </manifest> 

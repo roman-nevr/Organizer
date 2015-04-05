@@ -32,7 +32,7 @@ public class EditTask extends Activity {
         final int taskId = intent.getIntExtra("task_id",0);
 
         if (taskId == 0){
-            Toast.makeText(this, R.string.editTaskErrorMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.ErrorMessage, Toast.LENGTH_LONG).show();
             EditTask.this.finish();
         }
 
@@ -65,7 +65,7 @@ public class EditTask extends Activity {
                 /*task.setTaskName(etTaskEditName.getText().toString());
                 task.setTaskDescription(etTaskEditDescription.getText().toString());
                 task.set
-                dm.updateTask(EditTask.this, task);
+                dm.updateTaskById(EditTask.this, task);
                 Toast.makeText(EditTask.this, R.string.savedEditMessage, Toast.LENGTH_LONG).show();
                 EditTask.this.finish();*/
                 imm.hideSoftInputFromWindow(etTaskEditName.getWindowToken(), 0);
@@ -87,7 +87,7 @@ public class EditTask extends Activity {
                         task.setTaskName(etTaskEditName.getText().toString());
                         task.setTaskDescription(etTaskEditDescription.getText().toString());
 
-                        long result = dm.updateTask(EditTask.this, task);
+                        int result = dm.updateTaskById(EditTask.this, task);
                         if (result == -1){
                             Toast.makeText(EditTask.this, "write fail", Toast.LENGTH_LONG).show();
                         }

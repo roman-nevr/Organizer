@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import ru.rubicon21.organizer.R;
 import ru.rubicon21.organizer.entity.Task;
 
 import java.util.ArrayList;
@@ -147,7 +148,7 @@ public class DataManager {
         return id;
     }
 
-    public long updateTask(Context context, Task task){
+    public int updateTaskById(Context context, Task task){
         /*
         // подготовим значения для обновления
           cv.put("name", name);
@@ -163,6 +164,7 @@ public class DataManager {
         //contentValues.put(DB_TASK_ID, task.getTaskId());
         //contentValues.put(DB_PARENT_ID, task.getParentId());
         contentValues.put(DB_TASK_NAME, task.getTaskName());
+        contentValues.put(DB_PARENT_ID, task.getParentId());
         contentValues.put(DB_TASK_DESCRIPTION, task.getTaskDescription());
         contentValues.put(DB_TASK_PRIORITY, task.getPriority());
         if (task.isDone()){
@@ -171,7 +173,7 @@ public class DataManager {
             contentValues.put(DB_TASK_DONE, 0);
         }
 
-        long id = db.update(DB_TABLE_NAME, contentValues, "id = ?", new String[]{String.valueOf(task.getTaskId())});
+        int id = db.update(DB_TABLE_NAME, contentValues, "id = ?", new String[]{String.valueOf(task.getTaskId())});
         db.close();
         if (id == -1){
 
@@ -248,6 +250,78 @@ public class DataManager {
         cursor.close();
         db.close();
         return result;
+    }
+
+    public ArrayList<Task> findTaskByString(Context context, Task task, String string){
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        //tasks.add(new Task(0, context.getResources().getString(R.string.taskRootName), ""));
+        Cursor cursor = null;
+        SQLiteDatabase db = null;
+        try {
+            dbHelper = new DBHelper(context);
+            db = dbHelper.getWritableDatabase();
+            String selection = DB_TASK_NAME+" LIKE ?";
+            String[] selectionArgs = {"%"+string+"%"};
+            String orderBy = DB_TASK_DONE+" ASC,"+ DB_TASK_PRIORITY+" DESC";
+            cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, orderBy);
+            if (cursor.moveToFirst()){
+                int idColumnIndex = cursor.getColumnIndex(DB_TASK_ID);
+                int parentIdColumnIndex = cursor.getColumnIndex(DB_PARENT_ID);
+                int nameColumnIndex = cursor.getColumnIndex(DB_TASK_NAME);
+                int descriptionColumnIndex = cursor.getColumnIndex(DB_TASK_DESCRIPTION);
+                int doneColumnIndex = cursor.getColumnIndex(DB_TASK_DONE);
+                int priorityColumnIndex = cursor.getColumnIndex(DB_TASK_PRIORITY);
+                do{
+                    Task innerTask = new Task(
+                            cursor.getInt(idColumnIndex),
+                            cursor.getInt(parentIdColumnIndex),
+                            cursor.getString(nameColumnIndex),
+                            cursor.getString(descriptionColumnIndex));
+                    if (cursor.getInt(doneColumnIndex) == 1){
+                        innerTask.setDone(true);
+                    }else {
+                        innerTask.setDone(false);
+                    }
+                    innerTask.setPriority(cursor.getInt(priorityColumnIndex));
+                    if (true/*!hasParent(context,task,innerTask)*/){
+                        tasks.add(innerTask);
+                    }
+                }while (cursor.moveToNext());
+            }else {
+                //сделать оповещение о пустой базе
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "findTask Exception");
+        } finally {
+            cursor.close();
+            db.close();
+        }
+
+        return tasks;
+    }
+
+    private boolean hasParent (Context context, Task parentTask, Task checkedTask){
+        boolean result = false;
+        if ((parentTask == null) || (checkedTask == null)){
+            result = false;
+        }else
+            if (checkedTask.getParentId() == parentTask.getTaskId()){
+                result = true;
+            }else
+                if (parentTask.getTaskId() == checkedTask.getTaskId()){
+                result = true;
+                }else
+                    if (checkedTask.getParentId() == 0){
+                        result = false;
+                        }else {
+                        Task newCheckedTask = getTask(context, checkedTask.getParentId());
+                        if (newCheckedTask != null){
+                            hasParent(context,parentTask,newCheckedTask);
+                        }else return true;
+                        }
+        return result;
+
     }
 
     /*
@@ -338,6 +412,27 @@ public class DataManager {
             }//end second if
         }//end onUpgrade
 
+        @Override
+        public synchronized void close() {
+            super.close();
+            /*if (dbHelper != null){
+                dbHelper.close();
+            }*/
+        }
     }//end DBHelper
+
+    public void close(){
+        if (dbHelper != null){
+            dbHelper.close();
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if (dbHelper != null){
+            dbHelper.close();
+        }
+        super.finalize();
+    }
 
 }//end class

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/llTaskReplace"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Task name"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:id="@+id/tvTaskReplace"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etSearch"
+            android:hint="@string/searchHint"
+            android:textSize="20sp"
+            android:imeOptions="actionSearch"
+            android:layout_gravity="center_horizontal"/>
+    <ListView
+            android:id="@+id/lvTaskReplace"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+    <Button
+            android:id="@+id/buttonTaskReplace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:textSize="20sp"
+            android:text="@string/buttonTaskReplaceCancel"/>
+</LinearLayout>

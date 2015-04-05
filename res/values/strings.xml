@@ -9,13 +9,17 @@
     <string name="tvTaskPriority">Приоритет</string>
     <string name="tvTaskPriorityDescription">0 - средний приоритет. Отрицательный для уменьшения, положительный для увеличения</string>
 
+    <string name="labelTaskReplace">Перемещение задачи</string>
+    <string name="buttonTaskReplaceCancel">Отмена</string>
+
     <string name="cmTaskHeader">Выберите действие</string>
     <string name="cmTaskEdit">Изменить</string>
     <string name="cmTaskDone">Завершить</string>
     <string name="cmTaskContinue">Вернуть</string>
     <string name="cmTaskDelete">Удалить</string>
+    <string name="cmTaskReplace">Переместить</string>
 
-    <string name="deleteMessage">Удалена задача</string>
+    <string name="toastDeleteMessage">Удалена задача</string>
     <string name="deleteNothingMessage">Ничего не удалено</string>
 
     <string name="tvEditTaskName">Задача</string>
@@ -23,13 +27,20 @@
     <string name="buttonSaveEditTask">Сохранить</string>
     <string name="savedEditMessage">Изменено</string>
 
-    <string name="editTaskErrorMessage">Произошла ошибка, обратитесь к разработчику</string>
+    <string name="ErrorMessage">Произошла ошибка, обратитесь к разработчику</string>
     <string name="nothingToShowMessage">Нечего показывать. Создайте задачи</string>
+    <string name="taskRootNameMessage">Переместить задачу в корневой каталог?</string>
+    <string name="taskRootNameCap">Корневой каталог</string>
+    <string name="searchHint">Строка поиска</string>
+    <string name="dialogReplaceTitle">Переместить?</string>
+    <string name="dialogReplaceMessage">Переместить задачу в </string>
+    <string name="toastReplaceMessage">Перемещено в </string>
+
+    <string name="dialogOk">Да</string>
+    <string name="dialogCancel">Нет, не надо</string>
 
     <string name="dialogDeleteTitle">Удалить задачу?</string>
-    <string name="dialogDeleteDescription">Безвозвратное удаление задачи и всех подзадач</string>
-    <string name="dialogDeleteOk">Да</string>
-    <string name="dialogDeleteCancel">Пока не надо</string>
+    <string name="dialogDeleteMessage">Безвозвратное удаление задачи и всех подзадач</string>
 
     <string name="box">Корзина</string>
     <string-array name="names">

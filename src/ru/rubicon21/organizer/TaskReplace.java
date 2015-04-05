@@ -62,6 +62,8 @@ public class TaskReplace extends Activity {
         buttonTaskReplaceCancel.setOnClickListener(buttonCancel);
 
         tasks = dm.findTaskByString(this, task, etSearch.getText().toString());
+        tasks = removeBranchFromArrayList(tasks,task);
+
 
         if (task.getParentId() != 0){
             tasks.add(0, new Task(0, getResources().getString(R.string.taskRootNameCap), ""));
@@ -127,16 +129,42 @@ public class TaskReplace extends Activity {
                 //Toast.makeText(TaskRepalce.this, "afterChanged :", Toast.LENGTH_SHORT).show();
                 DataManager dm = new DataManager();
                 tasks = dm.findTaskByString(TaskReplace.this, task, etSearch.getText().toString());
+                tasks = removeBranchFromArrayList(tasks,task);
                 mainWindowAdapter.refreshDataSet(tasks);
             }
         });
 
     }
 
+    private ArrayList<Task> removeBranchFromArrayList(ArrayList<Task> tasks, Task parentTask){
+        ArrayList<Task> resultTasks = new ArrayList<Task>();
+        for (Task task:tasks){
+            if (!isTaskInBranch(parentTask, task)){
+                resultTasks.add(task);
+            }
+        }
+        return resultTasks;
+    }
+
+     private boolean isTaskInBranch(Task parentTask, Task checkedTask){
+         DataManager dm = new DataManager();
+         boolean result = false;
+        if ((parentTask.getTaskId() != checkedTask.getTaskId())){
+            while ((checkedTask != null) && (checkedTask.getParentId() != 0)) {
+                if (checkedTask.getParentId() == parentTask.getTaskId()){
+                    result = true;
+                }
+                checkedTask = dm.getTask(TaskReplace.this, checkedTask.getParentId());
+            }
+        }else {
+            result = true;
+        }
+        return result;
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
         this.getCurrentFocus().clearFocus();
-        //dm.close();
     }
 }

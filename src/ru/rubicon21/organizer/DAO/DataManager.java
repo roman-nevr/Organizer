@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import ru.rubicon21.organizer.R;
 import ru.rubicon21.organizer.entity.Task;
 
 import java.util.ArrayList;
@@ -52,12 +51,12 @@ public class DataManager {
     public ArrayList<Task> getTasks(Context context, int _parent_id){
         tasks = new ArrayList<Task>();
         dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String selection = DB_PARENT_ID+" LIKE ?";
         String[] selectionArgs = {String.valueOf(_parent_id)};
         String orderByPriority = DB_TASK_DONE+" ASC,"+ DB_TASK_PRIORITY+" DESC";
         //String orderByPriority =DB_TASK_PRIORITY+" DESC,"+ DB_TASK_DONE;
         String groupByDone = DB_TASK_DONE;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, orderByPriority);
         if (cursor.moveToFirst()){
             int idColumnIndex = cursor.getColumnIndex(DB_TASK_ID);
@@ -88,12 +87,11 @@ public class DataManager {
         return  tasks;
     }
 
-    public Task getTask (Context context, int _id){
+    public synchronized Task getTask (Context context, int _id){
         dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String selection = DB_TASK_ID +" LIKE ?";
         String[] selectionArgs = {String.valueOf(_id)};
-
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, null);
         Task task;// = new Task("","");
         if (cursor.moveToFirst()){
@@ -283,9 +281,7 @@ public class DataManager {
                         innerTask.setDone(false);
                     }
                     innerTask.setPriority(cursor.getInt(priorityColumnIndex));
-                    if (true/*!hasParent(context,task,innerTask)*/){
-                        tasks.add(innerTask);
-                    }
+                    tasks.add(innerTask);
                 }while (cursor.moveToNext());
             }else {
                 //сделать оповещение о пустой базе
@@ -301,28 +297,35 @@ public class DataManager {
         return tasks;
     }
 
-    private boolean hasParent (Context context, Task parentTask, Task checkedTask){
-        boolean result = false;
-        if ((parentTask == null) || (checkedTask == null)){
-            result = false;
-        }else
-            if (checkedTask.getParentId() == parentTask.getTaskId()){
-                result = true;
-            }else
-                if (parentTask.getTaskId() == checkedTask.getTaskId()){
-                result = true;
-                }else
-                    if (checkedTask.getParentId() == 0){
-                        result = false;
-                        }else {
-                        Task newCheckedTask = getTask(context, checkedTask.getParentId());
-                        if (newCheckedTask != null){
-                            hasParent(context,parentTask,newCheckedTask);
-                        }else return true;
-                        }
-        return result;
+    /*public ArrayList<Task> findTaskByStringInsensitive(Context context, Task task, String string){
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        try {
 
-    }
+        }catch (Exception e){
+
+        }finally {
+
+        }
+        return tasks;
+    }*/
+
+   /* private boolean isTaskInBranch(Context context, Task parentTask, Task checkedTask){
+        boolean result = false;
+        if ((parentTask.getTaskId() != checkedTask.getTaskId())){
+            while ((checkedTask != null) && (checkedTask.getParentId() != 0)) {
+                if (checkedTask.getParentId() == parentTask.getTaskId()){
+                    result = true;
+                }
+                checkedTask = this.getTask(context, checkedTask.getParentId());
+            }
+        }else {
+            result = true;
+        }
+        return result;
+    }*/
 
     /*
     PK

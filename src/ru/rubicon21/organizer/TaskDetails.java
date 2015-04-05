@@ -191,6 +191,9 @@ public class TaskDetails extends Activity {
             Toast.makeText(TaskDetails.this, R.string.nothingToShowMessage, Toast.LENGTH_LONG).show();
         }
         this.mainWindowAdapter.refreshDataSet(tasks);
+        if(this.getCurrentFocus() != null){
+            this.getCurrentFocus().clearFocus();
+        }
     }
 
     @Override

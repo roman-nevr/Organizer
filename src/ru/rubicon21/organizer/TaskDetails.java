@@ -48,6 +48,7 @@ public class TaskDetails extends Activity {
     final int CM_EDIT = 1;
     final int CM_DONE = 2;
     final int CM_DELETE = 3;
+    final int CM_VIBRO = 4;
 
     final float minSwipe = (float) 0.2;
 
@@ -209,6 +210,7 @@ public class TaskDetails extends Activity {
                 menu.add(0,CM_DONE,0,R.string.cmTaskDone);
             }
             menu.add(0,CM_DELETE,0,R.string.cmTaskDelete);
+            menu.add(0,CM_VIBRO,0,"Вибра");
 
         }
     }
@@ -261,6 +263,9 @@ public class TaskDetails extends Activity {
                 Log.d(LOG_TAG, "open dialog");
                 return true;
                // break;
+            case CM_VIBRO:
+                Intent vibroIntent = new Intent(TaskDetails.this, VibroTimer.class);
+                startActivity(vibroIntent);
             default:
                 return super.onContextItemSelected(item);
         }

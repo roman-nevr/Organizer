@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:keepScreenOn="true"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:id="@+id/pbTimer"
+            android:max="120"
+            android:progress="0"
+            android:indeterminate="false"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:id="@+id/llSpare">
+    </LinearLayout>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop the timer"
+            android:textSize="50sp"
+            android:id="@+id/btnStop"
+            android:layout_weight="50"/>
+</LinearLayout>
